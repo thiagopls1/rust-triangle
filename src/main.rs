@@ -7,7 +7,6 @@ const WINDOW_TITLE: &str = "GLFW Triangle";
 
 const VERT_SHADER: &str = "#version 330 core
     layout (location = 0) in vec3 position;
-     
     void main()
     {
         gl_Position = vec4(position, 1.0);
@@ -116,7 +115,7 @@ fn main() {
         gl::DetachShader(shader_program, vertex_shader);
         gl::DetachShader(shader_program, fragment_shader);
         gl::DeleteShader(vertex_shader);
-        gl::DeleteShader(vertex_shader);
+        gl::DeleteShader(fragment_shader);
     }
 
     // Triangle Coords (X, Y, Z)
@@ -167,9 +166,7 @@ fn main() {
     while !window.should_close() {
         glfw.poll_events();
 
-        for (_, event) in glfw::flush_messages(&events) {
-            glfw_handle_event(&mut window, event);
-        }
+        glfw::flush_messages(&events).for_each(|(_, event)| glfw_handle_event(&mut window, event));
 
         unsafe {
             gl::Clear(gl::COLOR_BUFFER_BIT);
