@@ -35,9 +35,12 @@ fn main() {
     let (screen_width, screen_height) = window.get_framebuffer_size();
 
     window.make_current();
+    // Set window to receive events
     window.set_key_polling(true);
+    // Load GL Lib
     gl::load_with(|ptr| window.get_proc_address(ptr) as *const _);
 
+    // Set Background Color
     unsafe {
         gl::Viewport(0, 0, screen_width, screen_height);
         gl_clear_color(Color {
@@ -48,7 +51,7 @@ fn main() {
         });
     }
 
-    // HANDLE VERTEX SHADER
+    // HANDLE VERTEX SHADER (Set coordinates)
     let vertex_shader = unsafe { gl::CreateShader(gl::VERTEX_SHADER) };
     unsafe {
         gl::ShaderSource(
@@ -73,7 +76,7 @@ fn main() {
         }
     }
 
-    // HANDLE FRAGMENT SHADER
+    // HANDLE FRAGMENT SHADER (Calculates the color output of the pixels)
     let fragment_shader = unsafe { gl::CreateShader(gl::FRAGMENT_SHADER) };
     unsafe {
         gl::ShaderSource(
@@ -121,7 +124,13 @@ fn main() {
         gl::DeleteShader(vertex_shader);
     }
 
-    let vertices = [-0.5f32, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0];
+    // Triangle Coords (X, Y, Z)
+    #[rustfmt::skip]
+    let vertices: [f32; 9] = [
+        -0.5, -0.5, 0.0, 
+        0.5, -0.5, 0.0, 
+        0.0, 0.5, 0.0
+    ];
 
     let mut vao = 0;
     unsafe { gl::GenVertexArrays(1, &mut vao) };
