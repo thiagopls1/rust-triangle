@@ -37,18 +37,13 @@ fn main() {
     window.make_current();
     // Set window to receive events
     window.set_key_polling(true);
-    // Load GL Lib
+    // Load GL Lib passing it to window variable
     gl::load_with(|ptr| window.get_proc_address(ptr) as *const _);
 
     // Set Background Color
     unsafe {
         gl::Viewport(0, 0, screen_width, screen_height);
-        gl_clear_color(Color {
-            r: 0.12,
-            g: 0.12,
-            b: 0.12,
-            a: 1.0,
-        });
+        gl_clear_color(Color::new(0.12, 0.12, 0.12, 1.0));
     }
 
     // HANDLE VERTEX SHADER (Set coordinates)
@@ -183,7 +178,6 @@ fn main() {
         unsafe {
             gl::UseProgram(shader_program);
             gl::BindVertexArray(vao);
-
             gl::DrawArrays(gl::TRIANGLES, 0, 3);
             gl::BindVertexArray(0);
         }
@@ -197,6 +191,12 @@ pub struct Color {
     g: f32,
     b: f32,
     a: f32,
+}
+
+impl Color {
+    pub fn new(r: f32, g: f32, b: f32, a: f32) -> Self {
+        Self { r, g, b, a }
+    }
 }
 
 pub fn gl_clear_color(c: Color) {
