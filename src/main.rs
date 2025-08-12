@@ -109,9 +109,9 @@ fn main() {
     // Triangle Coords (X, Y, Z)
     #[rustfmt::skip]
     let vertices: [f32; 9] = [
-        -0.5, -0.5, 0.0, 
-        0.5, -0.5, 0.0, 
-        0.0, 0.5, 0.0
+        0.5, 0.5, 0.0, 
+        -0.5, 0.5, 0.0, 
+        0.0, -0.5, 0.0
     ];
 
     let mut vao = 0;
