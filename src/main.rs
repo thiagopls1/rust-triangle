@@ -44,13 +44,13 @@ fn main() {
 
     // HANDLE VERTEX SHADER (Set coordinates)
     let vertex_shader = unsafe { gl::CreateShader(gl::VERTEX_SHADER) };
-    let vert_shader = generate_vert_shader(1.0);
+    let vert_shader_gen = generate_vert_shader(1.0);
     unsafe {
         gl::ShaderSource(
             vertex_shader,
             1,
-            &vert_shader.as_bytes().as_ptr().cast(),
-            &vert_shader.len().try_into().unwrap(),
+            &vert_shader_gen.as_bytes().as_ptr().cast(),
+            &vert_shader_gen.len().try_into().unwrap(),
         );
         gl::CompileShader(vertex_shader);
 
@@ -70,13 +70,13 @@ fn main() {
 
     // HANDLE FRAGMENT SHADER (Calculates the color output of the pixels)
     let fragment_shader = unsafe { gl::CreateShader(gl::FRAGMENT_SHADER) };
-    let frag_shader = generate_frag_shader(Color::new(1.0, 0.7, 0.2, 1.0));
+    let frag_shader_gen = generate_frag_shader(Color::new(1.0, 0.7, 0.2, 1.0));
     unsafe {
         gl::ShaderSource(
             fragment_shader,
             1,
-            &frag_shader.as_bytes().as_ptr().cast(),
-            &frag_shader.len().try_into().unwrap(),
+            &frag_shader_gen.as_bytes().as_ptr().cast(),
+            &frag_shader_gen.len().try_into().unwrap(),
         );
         gl::CompileShader(fragment_shader);
 
