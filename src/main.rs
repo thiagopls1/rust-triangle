@@ -7,7 +7,17 @@ const WINDOW_TITLE: &str = "GLFW Triangle";
 
 fn main() {
     use glfw::fail_on_errors;
+
+    // GLFW init, detecting errors
     let mut glfw = glfw::init(fail_on_errors!()).unwrap();
+
+    // Necessary OpenGL version
+    glfw.window_hint(glfw::WindowHint::ContextVersion(3, 3));
+    // Use only the core of OpenGL
+    glfw.window_hint(glfw::WindowHint::OpenGlProfile(
+        glfw::OpenGlProfileHint::Core,
+    ));
+    glfw.window_hint(glfw::WindowHint::OpenGlForwardCompat(true));
 
     let (mut window, events) = glfw
         .create_window(
@@ -17,18 +27,19 @@ fn main() {
             glfw::WindowMode::Windowed,
         )
         .expect("Failed to create GLFW window.");
-    let (screen_width, screen_height) = window.get_framebuffer_size();
+    let (buffer_width, buffer_height) = window.get_framebuffer_size();
 
     window.make_current();
     // Set window to receive events
     window.set_key_polling(true);
-    // Load GL Lib passing it to window variable
+
+    // Load GL Lib
     gl::load_with(|ptr| window.get_proc_address(ptr) as *const _);
 
     // Set Background Color
     unsafe {
-        gl::Viewport(0, 0, screen_width, screen_height);
-        gl_clear_color(Color::new(0.12, 0.12, 0.12, 1.0));
+        // Set view port coords to (0, 0), and passes window's buffer size
+        gl::Viewport(0, 0, buffer_width, buffer_height);
     }
 
     // HANDLE VERTEX SHADER (Set coordinates)
@@ -152,13 +163,14 @@ fn main() {
     );
 
     while !window.should_close() {
-        glfw.poll_events();
-
         glfw::flush_messages(&events).for_each(|(_, event)| glfw_handle_event(&mut window, event));
 
         unsafe {
+            gl_clear_color(Color::new(0.12, 0.12, 0.12, 1.0));
             gl::Clear(gl::COLOR_BUFFER_BIT);
         }
+
+        glfw.poll_events();
 
         unsafe {
             gl::UseProgram(shader_program);
